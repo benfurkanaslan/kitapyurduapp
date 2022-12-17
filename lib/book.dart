@@ -10,31 +10,24 @@ class BookPage extends StatefulWidget {
   State<BookPage> createState() => _BookPageState();
 }
 
+late Book book;
+
 class _BookPageState extends State<BookPage> {
   @override
   void initState() {
     super.initState();
-    getDataofBook();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Book book = Book(
+    book = Book(
       name: widget.doc.getElementsByClassName("pr_header__heading")[0].text,
       author: widget.doc.getElementsByClassName("pr_producers__publisher")[0].getElementsByClassName("pr_producers__item")[0].getElementsByClassName("pr_producers__link")[0].text,
       image: widget.imageUrl,
       price: widget.doc.getElementsByClassName("price__item")[0].text,
       description: widget.doc.getElementsByClassName("info__text")[0].text,
     );
-    return Scaffold();
   }
 
-  Future<void> getDataofBook() async {
-    debugPrint(widget.doc.getElementsByClassName("info__text")[0].text);
-    debugPrint(widget.doc.getElementsByClassName("pr_header__heading")[0].text);
-    debugPrint(widget.doc.getElementsByClassName("price__item")[0].text);
-    debugPrint(
-        widget.doc.getElementsByClassName("pr_producers__publisher")[0].getElementsByClassName("pr_producers__item")[0].getElementsByClassName("pr_producers__link")[0].text);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold();
   }
 }
 
