@@ -27,7 +27,38 @@ class _BookPageState extends State<BookPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(book.name),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 150,
+                  margin: const EdgeInsets.all(30),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                  ),
+                  child: Image.network(book.image, fit: BoxFit.cover),
+                ),
+                Column(
+                  children: [
+                    Text(book.name),
+                    Text(book.author),
+                    Text(book.price),
+                  ],
+                ),
+              ],
+            ),
+            Text(book.description),
+          ],
+        ),
+      ),
+    );
   }
 }
 

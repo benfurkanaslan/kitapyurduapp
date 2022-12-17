@@ -19,14 +19,88 @@ class _HomeState extends State<Home> {
     getData();
   }
 
-  Uri url = Uri.parse("https://www.kitapyurdu.com/yeni-cikan-kitaplar/haftalik/1.html");
+  Uri url = Uri.parse("https://www.kitapyurdu.com/index.php?route=product/best_sellers&page=2&list_id=1&filter_in_stock=1&filter_in_stock=1");
   List<String> data = [];
   List<BookforList> books = [];
   String headline = "";
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      drawer: Drawer(),
+      appBar: AppBar(
+        title: Text(headline),
+      ),
+      body: ListView.builder(
+        itemCount: books.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () async {
+              showDialog(
+                context: context,
+                builder: (context) => Dialog(
+                  child: SizedBox(
+                    height: 100,
+                    width: 200,
+                    child: Card(
+                      child: Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            CircularProgressIndicator(),
+                            Text("Yükleniyor..."),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+
+              Uri uri = Uri.parse(books[index].url);
+              http.Response response = await http.get(uri);
+              dom.Document document = parser.parse(response.body);
+              if (!mounted) return;
+              Navigator.of(context).pop();
+              if (!mounted) return;
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (builder) => BookPage(doc: document, imageUrl: books[index].image),
+                ),
+              );
+            },
+            child: Row(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    children: [
+                      Text("Sıra: ${books[index].order}"),
+                      Image.network(books[index].image),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text("Kitap adı: ${books[index].bookName}"),
+                      Text("Yayın evi: ${books[index].publisher}"),
+                      Text(books[index].author),
+                      Text(books[index].price),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 
   Future<void> getHeadline() async {
